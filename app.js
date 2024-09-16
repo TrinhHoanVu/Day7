@@ -10,10 +10,12 @@ var customerRouter = require("./routes/customer");
 
 const mongoose = require("mongoose");
 mongoose
-  .connect("mongodb://127.0.0.1:27017/demo")
+  .connect("mongodb+srv://admin:admin@customerdb.kzb9n.mongodb.net/?retryWrites=true&w=majority&appName=customerdb")
   .then(() => console.log("Database connected!"))
   .catch((err) => console.log(err));
 
+  //.connect("mongodb://127.0.0.1:27017/demo")
+  //mongodb+srv://<db_username>:<db_password>@customerdb.kzb9n.mongodb.net/?retryWrites=true&w=majority&appName=customerdb
 var app = express();
 
 // view engine setup
