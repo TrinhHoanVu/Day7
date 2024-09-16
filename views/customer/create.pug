@@ -2,7 +2,10 @@ extends ../layout
 
 block content
     h1=title 
-    
+     if errors && errors.length
+        ul 
+            each error in errors 
+                li= error.msg
     form(action="/customer/create", method="post", enctype="multipart/form-data")
         div
             lable(for="fullname") Fullname 
@@ -27,7 +30,7 @@ block content
                         span=e.msg
         div
             lable(for="image") Image 
-            input(type="file", name="image", id="image")
+            input(type="file", name="photo", id="image")
         div
             input(type="submit", value="Create")
     

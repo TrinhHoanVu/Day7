@@ -32,9 +32,9 @@ router.get("/create", (req, res) => {
   res.render("customer/create", { title: "Create Customer" });
 });
 
-router.post(
-  "/create",
+router.post("/create",
   [
+    upload.single("photo"),
     body("fullname").notEmpty().withMessage("Please input Fullname"),
     body("email")
       .notEmpty()
@@ -48,7 +48,6 @@ router.post(
         }
       }),
     body("password").notEmpty().withMessage("Please input Password"),
-    upload.single("image"),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -68,4 +67,31 @@ router.post(
   }
 );
 
+router.get("/delete/:id", async (req, res) => {
+  await customerModel.findByIdAndDelete(req.params.id)
+  res.redirect('/customer')
+})
+
+router.get('/update/:id', async (req, res) => {
+  let customer = await customerModel.findById(req.params.id)
+  res.render('customer/update', { customer })
+})
+
+router.post('/update/:id', upload.single('photo'), async (req, res) => {
+  const body = req.body
+  const image = req.file
+  let customer = await customerModel.findById(req.params.id)
+  customer.fullname = body.fullname
+  customer.email = body.email
+  customer.password = body.password
+  if (image) {
+    customer.image = image.filename
+  }
+  try {
+    await customer.save()
+    res.redirect('/customer')
+  } catch (err) {
+    res.redirect('/customer/error')
+  }
+})
 module.exports = router;
